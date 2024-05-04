@@ -6,8 +6,14 @@ from PySide6.QtWidgets import (
     QWidget
 )
 
+from PySide6.QtGui import (
+    QIcon
+)
+
 from modules.home import Home
 from modules.pomodoro import Pomodoro
+from modules.stats import Stats
+from modules.settings import Settings
 
 
 class Main(QMainWindow):
@@ -17,10 +23,21 @@ class Main(QMainWindow):
         self.main_widget_layout = QHBoxLayout()
         self.main_widget.setLayout(self.main_widget_layout)
 
-        self.navigation_bar = QTabWidget()
+        self.navigation_bar = QTabWidget(movable=True)
+        self.navigation_bar.setTabPosition(QTabWidget.TabPosition.North)
 
-        self.navigation_bar.addTab(Home(), "Home")
-        self.navigation_bar.addTab(Pomodoro(), "Pomodoro")
+        self.navigation_bar.addTab(
+            Home(), QIcon.fromTheme("home"), "Home"
+        )
+        self.navigation_bar.addTab(
+            Pomodoro(), QIcon.fromTheme("clock"), "Pomodoro"
+        )
+        self.navigation_bar.addTab(
+            Stats(), QIcon.fromTheme("adjustcurves"), "Stats"
+        )
+        self.navigation_bar.addTab(
+            Settings(), QIcon.fromTheme("settings-configure"), "Settings"
+        )
 
         self.main_widget_layout.addWidget(self.navigation_bar)
 
