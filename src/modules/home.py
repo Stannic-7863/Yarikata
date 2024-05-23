@@ -1,8 +1,9 @@
 from PySide6.QtWidgets import (
     QWidget,
     QVBoxLayout,
+    QHBoxLayout,
     QPushButton,
-    QToolBar
+    QSizePolicy
 )
 
 from PySide6.QtGui import (
@@ -20,8 +21,10 @@ from modules.generalModules.taskCheckBox import TaskCheckBoxWidget
 
 
 class Home(QWidget):
-    def __init__(self) -> None:
+    def __init__(self, parent) -> None:
         super().__init__()
+
+        self.setParent(parent)
 
         self.layout = QVBoxLayout()
         self.setLayout(self.layout)
@@ -31,14 +34,18 @@ class Home(QWidget):
 
     def setUpButtons(self) -> None:
 
-        self.button_container = QToolBar("Home Toolbar")
+        self.button_container = QWidget()
+        self.button_container_layout = QHBoxLayout()
+        self.button_container.setLayout(self.button_container_layout)
+        self.button_container.setSizePolicy(
+            QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Maximum)
 
-        self.add_button = QAction(QIcon.fromTheme("im-irc"), "", self)
+        self.add_button = QPushButton(QIcon.fromTheme("im-irc"), "", self)
         self.add_button.setStatusTip("Add a new task")
         self.add_button.setToolTip("Add a new task")
-        self.add_button.triggered.connect(self.onAddButtonTrigger)
+        self.add_button.clicked.connect(self.onAddButtonTrigger)
 
-        self.button_container.addAction(self.add_button)
+        self.button_container_layout.addWidget(self.add_button)
 
     def addWidgetsToMainLayout(self) -> None:
 
@@ -49,12 +56,12 @@ class Home(QWidget):
         print("Task Add Button Clicked")
 
         dialog = GetTaskDetailsDialog()
-        dialog.setWindowTitle("Add a new task")
 
         if dialog.exec():
-            print(f"Task Name : {dialog.getTaskData()}")
+            data = dialog.getTaskData()
+            print(f"Task Name : {data.task_name}")
 
-            self.layout.insertWidget(1, TaskCheckBoxWidget(dialog.getTaskData(), 1))
+            self.layout.insertWidget(1, TaskCheckBoxWidget(data))
 
         else:
             print("Action cancelled")

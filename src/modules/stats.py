@@ -5,8 +5,10 @@ from PySide6.QtWidgets import (
 
 
 class Stats(QWidget):
-    def __init__(self):
+    def __init__(self, parent):
         super().__init__()
+
+        self.setParent(parent)
 
         self.layout = QGridLayout()
         self.setLayout(self.layout)

@@ -7,7 +7,8 @@ from PySide6.QtWidgets import (
 )
 
 from PySide6.QtGui import (
-    QIcon
+    QIcon,
+    Qt
 )
 
 from modules.home import Home
@@ -15,6 +16,9 @@ from modules.pomodoro import Pomodoro
 from modules.stats import Stats
 from modules.settings import Settings
 
+
+# Todo : Make a custom tab widget to hold tabs in all directions with
+# horizontal text and icons.
 
 class Main(QMainWindow):
     def __init__(self) -> None:
@@ -27,23 +31,30 @@ class Main(QMainWindow):
         self.navigation_bar.setTabPosition(QTabWidget.TabPosition.North)
 
         self.navigation_bar.addTab(
-            Home(), QIcon.fromTheme("home"), "Home"
+            Home(self), QIcon.fromTheme("home"), "Home"
         )
         self.navigation_bar.addTab(
-            Pomodoro(), QIcon.fromTheme("clock"), "Pomodoro"
+            Pomodoro(self), QIcon.fromTheme("clock"), "Pomodoro"
         )
         self.navigation_bar.addTab(
-            Stats(), QIcon.fromTheme("adjustcurves"), "Stats"
+            Stats(self), QIcon.fromTheme("adjustcurves"), "Stats"
         )
         self.navigation_bar.addTab(
-            Settings(), QIcon.fromTheme("settings-configure"), "Settings"
+            Settings(self), QIcon.fromTheme("settings-configure"), "Settings"
         )
 
-        self.main_widget_layout.addWidget(self.navigation_bar)
+        self.main_widget_layout.addWidget(
+            self.navigation_bar, Qt.AlignmentFlag.AlignJustify)
 
         self.setCentralWidget(self.main_widget)
 
         self.showMaximized()
+
+        self.setGlobalCSS()
+
+    def setGlobalCSS(self) -> None:
+        self.setStyleSheet("""
+        """)
 
 
 if __name__ == "__main__":
